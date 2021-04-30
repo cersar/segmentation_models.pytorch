@@ -13,6 +13,7 @@ class DecoderBlock(nn.Module):
             out_channels,
             use_batchnorm=True,
             attention_type=None,
+            scale_factor=2,
     ):
         super().__init__()
         self.conv1 = md.Conv2dReLU(
@@ -31,10 +32,12 @@ class DecoderBlock(nn.Module):
             use_batchnorm=use_batchnorm,
         )
         self.attention2 = md.Attention(attention_type, in_channels=out_channels)
+        self.scale_factor = scale_factor
 
     def forward(self, x, skip=None):
-        x = F.interpolate(x, scale_factor=2, mode="nearest")
+        x = F.interpolate(x, scale_factor=self.scale_factor, mode="nearest")
         if skip is not None:
+            print(x.shape, skip.shape)
             x = torch.cat([x, skip], dim=1)
             x = self.attention1(x)
         x = self.conv1(x)
@@ -71,6 +74,8 @@ class UnetDecoder(nn.Module):
             use_batchnorm=True,
             attention_type=None,
             center=False,
+            scale_factor=2,
+
     ):
         super().__init__()
 
@@ -83,6 +88,11 @@ class UnetDecoder(nn.Module):
 
         encoder_channels = encoder_channels[1:]  # remove first skip with same spatial resolution
         encoder_channels = encoder_channels[::-1]  # reverse channels to start from head of encoder
+
+        if isinstance(scale_factor, int) or isinstance(scale_factor, float):
+            scale_factor = [scale_factor]*n_blocks
+
+        scale_factor = scale_factor[::-1]
 
         # computing blocks input and output channels
         head_channels = encoder_channels[0]
@@ -100,8 +110,8 @@ class UnetDecoder(nn.Module):
         # combine decoder keyword arguments
         kwargs = dict(use_batchnorm=use_batchnorm, attention_type=attention_type)
         blocks = [
-            DecoderBlock(in_ch, skip_ch, out_ch, **kwargs)
-            for in_ch, skip_ch, out_ch in zip(in_channels, skip_channels, out_channels)
+            DecoderBlock(in_ch, skip_ch, out_ch, scale_factor=sf, **kwargs)
+            for in_ch, skip_ch, out_ch, sf in zip(in_channels, skip_channels, out_channels, scale_factor)
         ]
         self.blocks = nn.ModuleList(blocks)
 
