@@ -110,7 +110,8 @@ swin_encoders = {
             "img_size": 224,
             "embed_dim": 96,
             "out_channels": (3, 96, 192, 384, 768),
-            "depths": [2, 2, 6, 2]
+            "depths": [2, 2, 6, 2],
+            "window_size": 7
         },
     },
     "Swin-S-224": {
@@ -120,7 +121,8 @@ swin_encoders = {
             "img_size": 224,
             "embed_dim": 96,
             "out_channels": (3, 96, 192, 384, 768),
-            "depths": [2, 2, 18, 2]
+            "depths": [2, 2, 18, 2],
+            "window_size": 7
         },
     },
     "Swin-B-224": {
@@ -130,7 +132,8 @@ swin_encoders = {
             "img_size": 224,
             "embed_dim": 128,
             "out_channels": (3, 128, 256, 512, 1024),
-            "depths": [2, 2, 18, 2]
+            "depths": [2, 2, 18, 2],
+            "window_size": 7
         },
     },
     "Swin-B-384": {
@@ -140,7 +143,8 @@ swin_encoders = {
             "img_size": 384,
             "embed_dim": 128,
             "out_channels": (3, 128, 256, 512, 1024),
-            "depths": [2, 2, 18, 2]
+            "depths": [2, 2, 18, 2],
+            "window_size": 12
         },
     },
     "Swin-L-224": {
@@ -150,7 +154,8 @@ swin_encoders = {
             "img_size": 224,
             "embed_dim": 192,
             "out_channels": (3, 192, 384, 768, 1536),
-            "depths": [2, 2, 18, 2]
+            "depths": [2, 2, 18, 2],
+            "window_size": 7
         },
     },
     "Swin-L-384": {
@@ -160,7 +165,8 @@ swin_encoders = {
             "img_size": 384,
             "embed_dim": 192,
             "out_channels": (3, 192, 384, 768, 1536),
-            "depths": [2, 2, 18, 2]
+            "depths": [2, 2, 18, 2],
+            "window_size": 12
         },
     },
 }
