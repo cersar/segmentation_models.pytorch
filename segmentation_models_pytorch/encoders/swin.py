@@ -68,14 +68,23 @@ class SwinEncoder(SwinTransformer, EncoderMixin):
 
 
 new_settings = {
-    "Swin-T": {
+    "Swin-T-224": {
         "imagenet": "https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth"
     },
-    "Swin-S": {
+    "Swin-S-224": {
         "imagenet": "https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_small_patch4_window7_224.pth"
     },
-    "Swin-B": {
+    "Swin-B-224": {
         "imagenet": "https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_base_patch4_window7_224.pth"
+    },
+    "Swin-B-384": {
+        "imagenet": "https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_base_patch4_window12_384.pth"
+    },
+    "Swin-L-224": {
+        "imagenet": "https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_large_patch4_window7_224_22k.pth"
+    },
+    "Swin-L-384": {
+        "imagenet": "https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_large_patch4_window12_384_22k.pth"
     }
 }
 
@@ -87,39 +96,70 @@ for model_name, sources in new_settings.items():
     for source_name, source_url in sources.items():
         pretrained_settings[model_name][source_name] = {
             "url": source_url,
-            'input_size': [3, 224, 224],
             'input_range': [0, 1],
             'mean': [0.485, 0.456, 0.406],
-            'std': [0.229, 0.224, 0.225],
-            'num_classes': 1000
+            'std': [0.229, 0.224, 0.225]
         }
 
 
 swin_encoders = {
-    "Swin-T": {
+    "Swin-T-224": {
         "encoder": SwinEncoder,
-        "pretrained_settings": pretrained_settings["Swin-T"],
+        "pretrained_settings": pretrained_settings["Swin-T-224"],
         "params": {
+            "img_size": 224,
             "embed_dim": 96,
             "out_channels": (3, 96, 192, 384, 768),
             "depths": [2, 2, 6, 2]
         },
     },
-    "Swin-S": {
+    "Swin-S-224": {
         "encoder": SwinEncoder,
-        "pretrained_settings": pretrained_settings["Swin-S"],
+        "pretrained_settings": pretrained_settings["Swin-S-224"],
         "params": {
+            "img_size": 224,
             "embed_dim": 96,
             "out_channels": (3, 96, 192, 384, 768),
             "depths": [2, 2, 18, 2]
         },
     },
-    "Swin-B": {
+    "Swin-B-224": {
         "encoder": SwinEncoder,
-        "pretrained_settings": pretrained_settings["Swin-B"],
+        "pretrained_settings": pretrained_settings["Swin-B-224"],
         "params": {
+            "img_size": 224,
             "embed_dim": 128,
             "out_channels": (3, 128, 256, 512, 1024),
+            "depths": [2, 2, 18, 2]
+        },
+    },
+    "Swin-B-384": {
+        "encoder": SwinEncoder,
+        "pretrained_settings": pretrained_settings["Swin-B-384"],
+        "params": {
+            "img_size": 384,
+            "embed_dim": 128,
+            "out_channels": (3, 128, 256, 512, 1024),
+            "depths": [2, 2, 18, 2]
+        },
+    },
+    "Swin-L-224": {
+        "encoder": SwinEncoder,
+        "pretrained_settings": pretrained_settings["Swin-L-224"],
+        "params": {
+            "img_size": 224,
+            "embed_dim": 192,
+            "out_channels": (3, 192, 384, 768, 1536),
+            "depths": [2, 2, 18, 2]
+        },
+    },
+    "Swin-L-384": {
+        "encoder": SwinEncoder,
+        "pretrained_settings": pretrained_settings["Swin-L-384"],
+        "params": {
+            "img_size": 384,
+            "embed_dim": 192,
+            "out_channels": (3, 192, 384, 768, 1536),
             "depths": [2, 2, 18, 2]
         },
     },
